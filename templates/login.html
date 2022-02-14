@@ -1,0 +1,18 @@
+<!doctype html>
+<head>
+    <title>Loto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loto.css') }}">
+</head>
+<body>
+    <div class=page>
+        <h1> Login </h1>
+        <form action="/login" method="post" class="login">
+           <input type="text" name="username" id="username">
+           <input type="password" name="password" id="password">
+           <input type="submit" class="validate" value="Login"> 
+        </form>
+        {% if failed %}
+            <h2 style="color: red">Username or password incorrect...</h2> 
+        {% endif %}
+    </div>
+</body>

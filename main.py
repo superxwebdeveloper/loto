@@ -1,4 +1,5 @@
 from flask import Flask, session, render_template, redirect, request, abort
+from my_secrets import my_username, my_password
 import os
 import random
 import time
@@ -24,37 +25,43 @@ def extract_guess(guess):
     guess.sort()
     return guess
 
+def login(username, password):
+    return username == my_username and password == my_password
+
 @app.route("/")
 def main():
     if 'state' not in session:
-        session["state"] = "player"
+        return redirect("/login", 302)
     return render_template("index.html")
 
-@app.route("/winner", methods=["POST"])
+@app.route("/winner", methods=["POST", "GET"])
 def verify():
     if 'state' not in session:
-        return redirect("/", 302)
-    guess = extract_guess(request.form["guess"])
-    print(guess)
-    chall = challenge()
-    session["solution"] = chall
-    if len(guess) != 5:
-        session["state"] = "loser"
-        return redirect("/", 302)
-    for i in range(5):
-        if guess[i] != chall[i]:
+        return redirect("/login", 302)
+    if request.method == "POST":
+        guess = extract_guess(request.form["guess"])
+        chall = challenge()
+        session["solution"] = chall
+        if len(guess) != 5:
             session["state"] = "loser"
             return redirect("/", 302)
-    session["state"] = "winner"
-    return redirect("/winner", 302)
-
-@app.route("/winner", methods=["GET"])
-def win():
-    if 'state' not in session:
-        return redirect("/", 302)
+        for i in range(5):
+            if guess[i] != chall[i]:
+                session["state"] = "loser"
+                return redirect("/", 302)
+        session["state"] = "winner"    
     if session["state"] != "winner":
         abort(403, "You have not won the game!")
     return render_template("win.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    if request.method == 'POST':
+        if login(request.form["username"], request.form["password"]):
+            session["state"] = "player"
+            return redirect("/", 302)
+    return render_template("login.html", failed=(request.method=="POST"))
     
 if __name__ == "__main__":
+    app.secret_key = "debugKey"
     app.run(host="127.0.0.1", debug=True, port=5000)

@@ -36,3 +36,12 @@ html {
     font-size: larger;
     margin: 10px;
 }
+
+.login {
+    display: flex;
+    flex-direction: column;
+}
+
+.login input {
+    margin: 5px;
+}
