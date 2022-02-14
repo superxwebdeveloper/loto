@@ -1,0 +1,24 @@
+<!doctype html>
+<head>
+    <title>Loto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loto.css') }}">
+    <script src="{{ url_for('static', filename='js/loto.js') }}"></script>
+</head>
+<body>
+    <div class=page>
+        <h1> Please choose 5 numbers. </h1>
+        <div class="grid">
+            {% for i in range(1,50) %}
+                <div class="ball" onclick="toggle({{ i }})" id="ball_{{ i }}"> {{ i }} </div>
+            {% endfor %}
+        </div>
+        <form action="/winner", method="post">
+           <input type="hidden" name="guess" id="guess">
+           <input type="submit" class="validate" value="Validate"> 
+        </form>
+        {% if session["state"] == "loser" %}
+            <h2 style="color: red">Those are not the right numbers...</h2> 
+            <h3>The correct numbers were: {{ session["solution"] }}.</h3>
+        {% endif %}
+    </div>
+</body>

@@ -1,0 +1,38 @@
+html {
+    background-color: lightgray;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ball {
+    cursor: pointer;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    background-color: white;
+    text-align: center;
+    color: dodgerblue;
+    font-family: fantasy;
+}
+
+.validate {
+    cursor: pointer;
+    background-color: white;
+    color: dodgerblue;
+    border-radius: 10px;
+    font-family: fantasy;
+    font-size: larger;
+    margin: 10px;
+}
