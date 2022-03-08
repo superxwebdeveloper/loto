@@ -9,8 +9,8 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 scoreboard_folder = "/home/web/scoreboard/"
 
-def challenge():
-    random.seed(int(time.time()))
+def challenge(id):
+    random.seed(int(time.time()) + id)
     solution = random.sample(list(range(1,50)), 5)
     solution.sort()
     return solution
@@ -42,15 +42,13 @@ def verify():
         return redirect("/login", 302)
     if request.method == "POST":
         guess = extract_guess(request.form["guess"])
-        chall = challenge()
+        chall = challenge(session["id"])
+        if "solution" in session and chall == session["solution"]:
+            abort(403, "Rate limited!")
         session["solution"] = chall
-        if len(guess) != 5:
+        if guess != chall:
             session["state"] = "loser"
             return redirect("/", 302)
-        for i in range(5):
-            if guess[i] != chall[i]:
-                session["state"] = "loser"
-                return redirect("/", 302)
         session["state"] = "winner"
     if session["state"] != "winner":
         abort(403, "You have not won the game!")
@@ -61,6 +59,7 @@ def login_page():
     if request.method == 'POST':
         if login(request.form["username"], request.form["password"]):
             session["state"] = "player"
+            session["id"] = random.randint(1,1000000)
             return redirect("/", 302)
     return render_template("login.html", failed=(request.method=="POST"))
 
