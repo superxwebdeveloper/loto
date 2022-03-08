@@ -4,4 +4,4 @@ I have developed a loto website for my web development modal course at Ecole pol
 
 You can find it here: [https://superxwebdeveloper.duckdns.org/](https://superxwebdeveloper.duckdns.org/)
 
-If you manage to find all 5 numbers, feel free to add your name to the leaderboard! (still WIP).
+If you manage to find all 5 numbers, feel free to add your name to the [hall of fame](https://superxwebdeveloper.duckdns.org/scoreboard).

@@ -45,3 +45,16 @@ html {
 .login input {
     margin: 5px;
 }
+
+.line {
+    display: flex;
+    font-size: larger;
+}
+
+.line div {
+    margin: 10px;
+}
+
+.line img {
+    height: 40px;
+}

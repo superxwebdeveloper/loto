@@ -6,4 +6,11 @@
 <body>
     <h1>Congratulations, you have correctly guessed the numbers!</h1>
     <h2>Call a teacher to validate your solution.</h2>
+
+    <h3>You can enter your name to be eternally saved on the <a href="/scoreboard">scoreboard</a>.</h3>
+    <form action="/scoreboard" method="post" class="login">
+        <input type="text" name="name" id="name">
+        <input type="hidden" name="date" id="date" value={{ time }}>
+        <input type="submit" class="validate" value="Enter hall of fame">
+    </form>
 </body>

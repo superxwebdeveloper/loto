@@ -7,6 +7,8 @@ import time
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
 
+scoreboard_folder = "/home/web/scoreboard/"
+
 def challenge():
     random.seed(int(time.time()))
     solution = random.sample(list(range(1,50)), 5)
@@ -49,10 +51,10 @@ def verify():
             if guess[i] != chall[i]:
                 session["state"] = "loser"
                 return redirect("/", 302)
-        session["state"] = "winner"    
+        session["state"] = "winner"
     if session["state"] != "winner":
         abort(403, "You have not won the game!")
-    return render_template("win.html")
+    return render_template("win.html", time=int(time.time()))
 
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
@@ -61,6 +63,21 @@ def login_page():
             session["state"] = "player"
             return redirect("/", 302)
     return render_template("login.html", failed=(request.method=="POST"))
+
+@app.route("/scoreboard", methods=["GET", "POST"])
+def scoreboard():
+    if request.method == "POST":
+        if 'state' not in session or session["state"] != "winner":
+            return redirect("/login", 302)
+        with open(scoreboard_folder + request.form["date"], "a+") as f:
+            f.write(request.form["name"])
+    winners = []
+    timestamps = [int(t) for t in os.listdir(scoreboard_folder)]
+    timestamps.sort()
+    for t in timestamps:
+        with open(scoreboard_folder + str(t)) as f:
+            winners.append(f.read())
+    return render_template("scoreboard.html", winners=winners)
     
 if __name__ == "__main__":
     app.secret_key = "debugKey"
