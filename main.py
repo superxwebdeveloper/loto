@@ -71,7 +71,14 @@ def scoreboard():
         with open(scoreboard_folder + request.form["date"], "a+") as f:
             f.write(request.form["name"])
     winners = []
-    timestamps = [int(t) for t in os.listdir(scoreboard_folder)]
+    timestamps = []
+    for t in os.listdir(scoreboard_folder):
+        try:
+            x = int(t)
+            if x >= 0:
+                timestamps.append(x)
+        except ValueError:
+            pass
     timestamps.sort()
     for t in timestamps:
         with open(scoreboard_folder + str(t)) as f:
@@ -80,4 +87,5 @@ def scoreboard():
     
 if __name__ == "__main__":
     app.secret_key = "debugKey"
+    scoreboard_folder = "/home/apoirrier/scoreboard/"
     app.run(host="127.0.0.1", debug=True, port=5000)
